@@ -1,0 +1,139 @@
+<!----------------------------EXPENSES NEW ADAPTATION ------------------------ -->
+
+{% extends 'base.html' %}
+
+
+{% block title %} 
+    Home 
+{% endblock %}
+
+
+{% block body %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Panel Heading</div>
+      <div class="panel-body">All Time Average {{all_tme_avg}} // Days since start {{days_count_final}} 
+        // All Time Sum {{all_time_sum}} // All Days Historical {{days_count_final}}</div>
+  </div>
+
+
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success" role="alert">
+                        {{message}}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+        {% endwith %}
+
+
+        <table class="table table-success table-striped table-hover table-dark" border="0.2">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Subject</th>
+                    <th>Comments</th>
+                    <th>Duration</th>
+                    <th>Date</th>
+                    <th colspan="2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+                {% for groc in grocs %}
+                    <tr>
+                        <td>{{groc.id}}</td>
+                        <td>{{groc.subject}}</td>
+                        <td>{{groc.comment}}</td>
+                        <td>{{groc.duration}}</td>
+                        <td>{{groc.date_added.strftime('%Y-%m-%d')}}</td>
+                        <td>
+                            <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modaledit{{groc.id}}">Թարմացնել</a>
+                            <a href="" class="btn btn-danger" onclick="return confirm('Համոզված ես որ ուզում ես ջնջել?')">Ջմջել</a>
+                        </td>
+                    </tr>
+
+
+                    <!-- update model -->
+ <div id="modaledit{{groc.id}}" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+       <div class="modal-content" >
+          <div class="modal-header">
+             <h4 class="modal-title">Թարմացնել Գնումը</h4>
+          </div>
+          <div class="modal-body">
+ 
+             <form action="{{url_for('update')}}" method="POST">
+ 
+ 
+                <div class="form-group">
+ 
+                   <label>Ապրանքատեսակ:</label>
+                    <input type="hidden"  name="id" value="{{groc.id}}">
+                   <input type="text" class="form-control" name="product" value="{{groc.product}}" >
+ 
+                </div>
+ 
+ 
+ 
+                 <div class="form-group">
+                   <label>Նշումներ:</label>
+                   <input type="text" class="form-control" name="comment" value="{{groc.comment}}">
+                </div>
+ 
+                  <div class="form-group">
+                   <label>Գին:</label>
+                   <input type="number" class="form-control" name="price" value="{{groc.price}}">
+                </div>
+
+                <div class="form-group">
+                    <label>Գնված Է:</label>
+                    <input type="datetime" class="form-control" name="date_added" value="{{groc.date_added}}">
+                 </div>
+ 
+                <div class="form-group">
+                   <button class="btn btn-primary mt-4" type="submit">Թարմացնել Գնումը</button>
+                </div>
+ 
+ 
+             </form>
+ 
+ 
+          </div>
+ 
+ 
+          <div class="modal-footer">
+             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+ 
+          </div>
+ 
+ 
+       </div>
+ 
+ 
+    </div>
+ 
+ 
+ </div>
+ 
+
+
+                    
+
+
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+
+

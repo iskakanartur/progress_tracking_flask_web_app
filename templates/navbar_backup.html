@@ -1,0 +1,94 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #273746;" >
+   <div class="container">
+
+
+     <a class="navbar-brand" href="">
+       <img src="{{url_for('static', filename='savings.png')}}" width="120" height="60" class="d-inline-block align-text-top">
+     </a>
+
+     <span class="navbar-text">
+
+     </span>
+
+     <ul class="navbar-nav">
+
+        <li class="nav-item active"> 
+           <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+        </li>
+
+        <li class="nav-item active"> 
+           <a class="nav-link" href="{{ url_for('history_page') }}">History</a>
+        </li>
+
+        <li class="nav-item">
+           <a class="nav-link" href="#">Բազար</a>
+        </li>
+
+        <li class="nav-item">
+           <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#insert_modal">Ավելացնել Նոր Գնում</button>
+           <button type="button" class="btn btn-info">Info</button>
+        </li>
+        
+
+     </ul>
+     
+
+  </div>
+
+ 
+</nav>
+
+
+<!-- Modal  for inserting new purchase-->
+<div id="insert_modal" class="modal fade" role="dialog" >
+   <div class="modal-dialog" data-bs-theme="dark">
+      <div class="modal-content" >
+         <div class="modal-header">
+            <h4 class="modal-title">Ավելացնել Նոր Գնում</h4>
+         </div>
+         <div class="modal-body">
+
+            <form action="{{url_for('insert_subject')}}" method="POST">
+
+
+               <div class="form-group">
+                  <label>Ապրանք:</label>
+                  <input type="text"   class="form-control" name="product" required="1">
+               </div>
+
+
+                <div class="form-group">
+                  <label>Նշումներ:</label>
+                  <input type="text" class="form-control" name="comment" required="1">
+               </div>
+
+                 <div class="form-group">
+                  <label>Գին:</label>
+                  <input type="number" class="form-control" name="price" required="1">
+               </div>
+
+               <div class="form-group">
+                  <button class="btn btn-primary mt-4" type="submit">Ավելացնել Գնումը</button>
+               </div>
+
+
+            </form>
+
+
+         </div>
+
+
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+         </div>
+
+      </div>
+   </div>
+
+
+</div>
+
+
+<!-- -------------------Modal  for INFO - Get average of expenses, sum etc------------------- -->
+

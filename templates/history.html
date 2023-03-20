@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  History Page
+{% endblock %}
+
+
+
+
+{% block body %}
+      <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <!-- Your Columns HERE -->
+                <th scope="col">ID</th>
+                <th scope="col">Ապրանքատեսակ</th>
+                <th scope="col">Նշումներ</th>
+                <th scope="col">Գին</th>
+                <th scope="col">Գնված է</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Your rows inside the table HERE: %H:%M' for minutes -->
+            {% for trans in seven_day_expenses %}
+                <tr>
+                    <td>{{trans.id}}</td>
+                    <td>{{trans.product }}</td>
+                    <td>{{trans.comment}}</td>
+                    <td>{{trans.price}}</td>
+                    <td>{{trans.date_added.strftime('%Y-%m-%d')}}</td>
+                </tr>
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+{% endblock %}
+
+

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}
+  Januray
+{% endblock %}
+
+
+
+
+{% block body %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">Panel Heading</div>
+    <div class="panel-body">Sum for Januray : {{janr|sum(attribute='price')}} -  Aver for January : {{(janr|sum(attribute='price')/dyz[1])|round }}  </div>
+</div>
+
+ 
+      <table class="table table-hover table-dark">  
+        <thead>
+            <tr>
+                <!-- Your Columns HERE -->
+                <th scope="col">ID</th>
+                <th scope="col">Ապրանքատեսակ</th>
+                <th scope="col">Նշումներ</th>
+                <th scope="col">Գին</th>
+                <th scope="col">Գնված է</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Your rows inside the table HERE: -->
+
+            {% for j in janr %}
+            <tr>
+              <td>{{j.id}}</td>
+              <td>{{j.product }}</td>
+              <td>{{j.comment}}</td>
+              <td>{{j.price}}</td>
+              <td>{{j.date_added.strftime('%Y-%m-%d')}}</td>
+          </tr>
+          {% endfor %}
+
+
+
+        </tbody>
+    </table>
+{% endblock %}
+
+
