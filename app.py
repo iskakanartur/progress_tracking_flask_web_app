@@ -3,6 +3,18 @@
 ## from app import db
 ## db.create_all()
 
+
+
+ ################## TEMP IMPORTS FOR SIMPLE VIZ PLOT DEL LATER #######
+import io
+import random
+from flask import Response
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+
+################################################
+
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
@@ -124,13 +136,39 @@ def update():
         my_data = Learn.query.get(request.form.get('id'))
 
         my_data.subject = request.form['subject']
-        my_data.comment = request.form['comment']
         my_data.duration = request.form['duration']
         my_data.date_added = request.form['date_added']
+        my_data.comment = request.form['comment']
 
         db.session.commit()
         flash("Գնումը Գրանցված է")
         return redirect(url_for('index'))
+
+
+############################ A simple VIZ Setup. change later ###############
+@app.route('/plot')
+def plot():
+    left = [1, 2, 3, 4, 5]
+    # heights of bars
+    height = [10, 24, 36, 40, 5]
+    # labels for bars
+    tick_label = ['one', 'two', 'three', 'four', 'five']
+    # plotting a bar chart
+    plt.bar(left, height, tick_label=tick_label, width=0.8, color=['red', 'green'])
+
+    # naming the y-axis
+    plt.ylabel('y - axis')
+    # naming the x-axis
+    plt.xlabel('x - axis')
+    # plot title
+    plt.title('My bar chart!')
+
+    plt.savefig('static/images/plot.png')
+
+    return render_template('plot.html', url='/static/images/plot.png')
+
+
+
 
 
 #################### RouTe To Last 30 Days Purchases ##################

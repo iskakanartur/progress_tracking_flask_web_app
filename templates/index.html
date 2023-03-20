@@ -37,9 +37,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Subject</th>
-                    <th>Comments</th>
                     <th>Duration</th>
                     <th>Date</th>
+                    <th>Comments</th>
                     <th colspan="2">Actions</th>
                 </tr>
             </thead>
@@ -50,55 +50,55 @@
                     <tr>
                         <td>{{groc.id}}</td>
                         <td>{{groc.subject}}</td>
-                        <td>{{groc.comment}}</td>
                         <td>{{groc.duration}}</td>
                         <td>{{groc.date_added.strftime('%Y-%m-%d')}}</td>
+                        <td>{{groc.comment}}</td>
                         <td>
-                            <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modaledit{{groc.id}}">Թարմացնել</a>
-                            <a href="" class="btn btn-danger" onclick="return confirm('Համոզված ես որ ուզում ես ջնջել?')">Ջմջել</a>
+                            <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modaledit{{groc.id}}">Update</a>
+                            <a href="" class="btn btn-danger" onclick="return confirm('Sure to delete?')">Delete</a>
                         </td>
                     </tr>
 
 
                     <!-- update model -->
  <div id="modaledit{{groc.id}}" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-       <div class="modal-content" >
-          <div class="modal-header">
-             <h4 class="modal-title">Թարմացնել Գնումը</h4>
+    <div class="modal-dialog" >
+       <div class="modal-content"  style="background-color: #273746;">
+          <div class="modal-header" style="background-color: #273746;">
+             <h4 class="modal-title">Update</h4>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" style="background-color: #273746;">
  
              <form action="{{url_for('update')}}" method="POST">
  
  
                 <div class="form-group">
  
-                   <label>Ապրանքատեսակ:</label>
+                   <label>Subject:</label>
                     <input type="hidden"  name="id" value="{{groc.id}}">
-                   <input type="text" class="form-control" name="product" value="{{groc.product}}" >
+                   <input type="text" class="form-control" name="subject" value="{{groc.subject}}" >
  
                 </div>
  
  
  
                  <div class="form-group">
-                   <label>Նշումներ:</label>
-                   <input type="text" class="form-control" name="comment" value="{{groc.comment}}">
+                   <label>Duration:</label>
+                   <input type="text" class="form-control" name="duration" value="{{groc.duration}}">
                 </div>
  
                   <div class="form-group">
-                   <label>Գին:</label>
-                   <input type="number" class="form-control" name="price" value="{{groc.price}}">
+                   <label>date_added:</label>
+                   <input type="date" class="form-control" name="date_added" value="{{groc.date_added}}">
                 </div>
 
                 <div class="form-group">
-                    <label>Գնված Է:</label>
-                    <input type="datetime" class="form-control" name="date_added" value="{{groc.date_added}}">
+                    <label>Comment:</label>
+                    <input type="datetime" class="form-control" name="comment" value="{{groc.comment}}">
                  </div>
  
                 <div class="form-group">
-                   <button class="btn btn-primary mt-4" type="submit">Թարմացնել Գնումը</button>
+                   <button class="btn btn-primary mt-4" type="submit">Update</button>
                 </div>
  
  
