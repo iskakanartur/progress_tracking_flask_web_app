@@ -1,9 +1,32 @@
 import matplotlib.pyplot as plt
 from sqlalchemy import create_engine
+from sqlalchemy.sql import text ## To execute plain sql 
 import settings
+
+
+##
+# import necessary packages
+import sqlalchemy
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.engine import result
+
+##
 
 engine = create_engine(f'postgresql://postgres:{settings.pgpw}@localhost/progress')
 
+# initialize the Metadata Object
+meta = MetaData(bind=engine)
+MetaData.reflect(meta)
+
+#with engine.connect() as con:
+statement = text("""select sum(duration) as DURATION_WEEK from learn where 
+                            date_added < DATE_TRUNC('week', NOW())
+                                AND
+                            date_added >= DATE_TRUNC('week', NOW()) - interval '7 day' ;""")
+
+con.execute(statement)
+
+engine.execute(statement)
 
 
 
