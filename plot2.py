@@ -1,13 +1,4 @@
 import matplotlib.pyplot as plt
-from sqlalchemy import create_engine
-import settings
-
-engine = create_engine(f'postgresql://postgres:{settings.pgpw}@localhost/progress')
-
-
-
-
-
 
 
 fig, ax = plt.subplots(figsize=(6, 6))

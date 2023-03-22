@@ -15,6 +15,10 @@ import matplotlib.pyplot as plt
 
 ################################################
 
+from os import environ
+import settings 
+
+
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
@@ -37,12 +41,10 @@ import psycopg2
 
 app = Flask(__name__)
 
-## CHnages this secrets see app1.oy os get 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://turo:HayastaN77@127.0.0.1/flaskaws'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:TraCak45@localhost/progress'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:{settings.pgpw}@localhost/progress'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = "somethingunique"
+app.secret_key = settings.sky
 
 
 db = SQLAlchemy(app)
