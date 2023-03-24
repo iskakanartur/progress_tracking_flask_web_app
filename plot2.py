@@ -10,5 +10,6 @@ patches[1].set_edgecolor('white')
 plt.title('Worldwide Access to Electricity', fontsize=24, loc='left')
 plt.text(0, 0, f"{data[0]}%", ha='center', va='center', fontsize=42)
 plt.text(-1.2, -1.3, "Source: ourworldindata.org/energy-access", ha='left', va='top', fontsize=12)
+#plt.savefig('static/images/plot_progress.png')
 plt.show()
 

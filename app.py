@@ -170,6 +170,19 @@ def plot():
     return render_template('plot.html', url='/static/images/plot.png')
 
 
+############################ Percent COmplete Plot  ###############
+from  plot_progress import plot_learning_progress
+@app.route('/plot_progress')
+def plot_progress():
+    actual_learnsum_plot = plot_learning_progress()
+    
+    return render_template('plot_progress.html', url='/static/images/plot_progress.png')
+
+
+
+
+
+
 
 
 
