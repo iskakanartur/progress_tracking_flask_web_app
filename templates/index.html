@@ -46,22 +46,22 @@
             <tbody>
 
 
-                {% for groc in grocs %}
+                {% for learn_query in learn_query_all %}
                     <tr>
-                        <td>{{groc.id}}</td>
-                        <td>{{groc.subject}}</td>
-                        <td>{{groc.duration}}</td>
-                        <td>{{groc.date_added.strftime('%Y-%m-%d')}}</td>
-                        <td>{{groc.comment}}</td>
+                        <td>{{learn_query.id}}</td>
+                        <td>{{learn_query.subject}}</td>
+                        <td>{{learn_query.duration}}</td>
+                        <td>{{learn_query.date_added.strftime('%Y-%m-%d')}}</td>
+                        <td>{{learn_query.comment}}</td>
                         <td>
-                            <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modaledit{{groc.id}}">Update</a>
+                            <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modaledit{{learn_query.id}}">Update</a>
                             <a href="" class="btn btn-danger" onclick="return confirm('Sure to delete?')">Delete</a>
                         </td>
                     </tr>
 
 
                     <!-- update model -->
- <div id="modaledit{{groc.id}}" class="modal fade" role="dialog">
+ <div id="modaledit{{learn_query.id}}" class="modal fade" role="dialog">
     <div class="modal-dialog" >
        <div class="modal-content"  style="background-color: #273746;">
           <div class="modal-header" style="background-color: #273746;">
@@ -75,8 +75,8 @@
                 <div class="form-group">
  
                    <label>Subject:</label>
-                    <input type="hidden"  name="id" value="{{groc.id}}">
-                   <input type="text" class="form-control" name="subject" value="{{groc.subject}}" >
+                    <input type="hidden"  name="id" value="{{learn_query.id}}">
+                   <input type="text" class="form-control" name="subject" value="{{learn_query.subject}}" >
  
                 </div>
  
@@ -84,17 +84,17 @@
  
                  <div class="form-group">
                    <label>Duration:</label>
-                   <input type="text" class="form-control" name="duration" value="{{groc.duration}}">
+                   <input type="text" class="form-control" name="duration" value="{{learn_query.duration}}">
                 </div>
  
                   <div class="form-group">
                    <label>date_added:</label>
-                   <input type="date" class="form-control" name="date_added" value="{{groc.date_added}}">
+                   <input type="date" class="form-control" name="date_added" value="{{learn_query.date_added}}">
                 </div>
 
                 <div class="form-group">
                     <label>Comment:</label>
-                    <input type="datetime" class="form-control" name="comment" value="{{groc.comment}}">
+                    <input type="datetime" class="form-control" name="comment" value="{{learn_query.comment}}">
                  </div>
  
                 <div class="form-group">

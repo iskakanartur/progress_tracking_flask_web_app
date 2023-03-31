@@ -26,13 +26,13 @@
   <tbody>
 
 
-      {% for groc in mo_to_sun %}
+      {% for learn_query in mo_to_sun %}
           <tr>
-              <td>{{groc.id}}</td>
-              <td>{{groc.subject}}</td>
-              <td>{{groc.duration}}</td>
-              <td>{{groc.date_added.strftime('%Y-%m-%d')}}</td>
-              <td>{{groc.comment}}</td>
+              <td>{{learn_query.id}}</td>
+              <td>{{learn_query.subject}}</td>
+              <td>{{learn_query.duration}}</td>
+              <td>{{learn_query.date_added.strftime('%Y-%m-%d')}}</td>
+              <td>{{learn_query.comment}}</td>
               <td>
 
         {% endfor %}

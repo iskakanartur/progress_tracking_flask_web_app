@@ -94,7 +94,7 @@ def total_number_of_days ():
 
 @app.route('/')
 def index():
-    grocs = Learn.query.all()
+    learn_query_all = Learn.query.all()
 
     max_duration = db.session.query(func.max(Learn.duration)).scalar()
     min_duration = db.session.query(func.min(Learn.duration)).scalar()
@@ -107,7 +107,7 @@ def index():
     all_tme_avg = round (all_time_sum/days_count_final, 2)
 
 
-    return render_template('index.html', grocs=grocs, all_tme_avg=all_tme_avg,
+    return render_template('index.html', learn_query_all=learn_query_all, all_tme_avg=all_tme_avg,
                             days_count_final=days_count_final,
                             all_time_sum=all_time_sum)
     
@@ -154,9 +154,8 @@ def past_mo_to_sun ():
     
     mo_to_sun = db.session.query(Learn).filter (and_(Learn.date_added 
                 <= func.date_trunc('week', func.now( ) ), Learn.date_added 
-                >= func.date_trunc('week', func.now( ) )  -  timedelta(days=7)))
+                >= func.date_trunc('week', func.now( ) ) - timedelta(days=7))).order_by(Learn.date_added )
                 
-        
     return (mo_to_sun)
 
 
