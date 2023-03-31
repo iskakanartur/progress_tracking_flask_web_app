@@ -24,10 +24,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from sqlalchemy import func, text
 
-#from datetime import date, datetime, timedelta
-#from datetime import datetime
+
 from datetime import date, datetime, timedelta
-from sqlalchemy.types import DateTime
 from sqlalchemy.sql import expression
 from sqlalchemy import inspect
 from sqlalchemy import extract  
@@ -91,6 +89,7 @@ def total_number_of_days ():
     return (total_days_count_final)
 
 
+ 
 
 
 @app.route('/')
@@ -145,6 +144,21 @@ def update():
         db.session.commit()
         flash("Գնումը Գրանցված է")
         return redirect(url_for('index'))
+    
+
+################################## QUERY LAST WEEK MO - SU   ##########################
+## See the plain sql version in progress_plain.sql file 
+def past_mo_to_sun ():
+
+    from sqlalchemy import and_ ### to combine db queries below
+    
+    mo_to_sun = db.session.query(Learn).filter (and_(Learn.date_added 
+                <= func.date_trunc('week', func.now( ) ), Learn.date_added 
+                >= func.date_trunc('week', func.now( ) )  -  timedelta(days=7)))
+                
+        
+    return (mo_to_sun)
+
 
 
 ############################ A simple VIZ Setup. change later ###############
@@ -167,7 +181,12 @@ def plot():
 
     plt.savefig('static/images/plot.png')
 
-    return render_template('plot.html', url='/static/images/plot.png')
+    ## Temp QUery 
+    #filter_after = datetime.today() - timedelta(days = 30)
+    #mo_to_sun = Learn.query.filter(Learn.date_added >= filter_after).all()
+    mo_to_sun = past_mo_to_sun ()
+
+    return render_template('plot.html', url='/static/images/plot.png', mo_to_sun= mo_to_sun)
 
 
 ############################ Percent COmplete Plot  ###############

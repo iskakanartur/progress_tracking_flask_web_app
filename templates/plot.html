@@ -10,7 +10,38 @@
 {% block body %}
 
 <img src={{url}} alt="Chart" height="auto" width="35%">
+
+
+<table class="table table-success table-striped table-hover table-dark" border="0.2">
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Subject</th>
+          <th>Duration</th>
+          <th>Date</th>
+          <th>Comments</th>
+          <th colspan="2">Actions</th>
+      </tr>
+  </thead>
+  <tbody>
+
+
+      {% for groc in mo_to_sun %}
+          <tr>
+              <td>{{groc.id}}</td>
+              <td>{{groc.subject}}</td>
+              <td>{{groc.duration}}</td>
+              <td>{{groc.date_added.strftime('%Y-%m-%d')}}</td>
+              <td>{{groc.comment}}</td>
+              <td>
+
+        {% endfor %}
+              </tbody>
+          </table>
+
+
+
+
      
 {% endblock %}
-
 
