@@ -159,45 +159,42 @@ def past_mo_to_sun ():
     return (mo_to_sun)
 
 
+###################### QUERY SUM OF past MO to SUN Learning Hours  #########################
+def past_mo_to_sun_sum ():
 
-############################ A simple VIZ Setup. change later ###############
-@app.route('/plot')
-def plot():
-    left = [1, 2, 3, 4, 5]
-    # heights of bars
-    height = [10, 24, 36, 40, 5]
-    # labels for bars
-    tick_label = ['one', 'two', 'three', 'four', 'five']
-    # plotting a bar chart
-    plt.bar(left, height, tick_label=tick_label, width=0.8, color=['red', 'green'])
-
-    # naming the y-axis
-    plt.ylabel('y - axis')
-    # naming the x-axis
-    plt.xlabel('x - axis')
-    # plot title
-    plt.title('My bar chart!')
-
-    plt.savefig('static/images/plot.png')
-
-    ## Temp QUery 
-    #filter_after = datetime.today() - timedelta(days = 30)
-    #mo_to_sun = Learn.query.filter(Learn.date_added >= filter_after).all()
-    mo_to_sun = past_mo_to_sun ()
-
-    return render_template('plot.html', url='/static/images/plot.png', mo_to_sun= mo_to_sun)
-
-
-############################ Percent COmplete Plot  ###############
-from  plot_progress import plot_learning_progress
-@app.route('/plot_progress')
-def plot_progress():
-    actual_learnsum_plot = plot_learning_progress()
+    from sqlalchemy import and_ ### to combine db queries below
     
-    return render_template('plot_progress.html', url='/static/images/plot_progress.png')
+    mo_to_sun_sum = db.session.query(Learn).filter (and_(Learn.date_added 
+                <= func.date_trunc('week', func.now( ) ), Learn.date_added 
+                >= func.date_trunc('week', func.now( ) ) - 
+                timedelta(days=7))).with_entities(func.sum(Learn.duration)).scalar()
+                
+    return (mo_to_sun_sum)
 
 
+####################### PLOT THE PROGRES CIRCLE MO - SU        ##########################
+@app.route('/progress_plot')
+def progress_plot():
+    fig, ax = plt.subplots(figsize=(6, 6))
 
+    full_circle = 600 ## 10 hours a wee
+    week_sum_learning = past_mo_to_sun_sum ()
+    percent_complete = round (week_sum_learning/full_circle*100, 1)
+
+    data = [percent_complete, 100- percent_complete]
+
+    wedgeprops = {'width':0.3, 'edgecolor':'black', 'lw':3}
+    patches, _ = ax.pie(data, wedgeprops=wedgeprops, startangle=90, colors=['#5DADE2', 'white'])
+    patches[1].set_zorder(0)
+    patches[1].set_edgecolor('white')
+    plt.title('Percent Complete of total 10 hours a week ', fontsize=24, loc='left')
+    plt.text(0, 0, f"{data[0]}%", ha='center', va='center', fontsize=42)
+    plt.savefig('static/images/progress_plot.png')
+
+    mo_to_sun = past_mo_to_sun ()
+    
+    return render_template('progress_plot.html', 
+                           url='/static/images/progress_plot.png', mo_to_sun= mo_to_sun)
 
 
 
