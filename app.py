@@ -172,6 +172,19 @@ def past_mo_to_sun_sum ():
     return (mo_to_sun_sum)
 
 
+################### QUERY INDIVIDUAL SUM OF LEARNING SUBJECTS     #########################
+def past_mo_to_sun_subj_sum ():
+
+    from sqlalchemy import and_ ### to combine db queries below
+    
+    mo_to_sun_sum_subj_sum = db.session.query(Learn).filter (and_( 
+        Learn.date_added <= func.date_trunc('week', func.now( ) ), 
+        Learn.date_added >= func.date_trunc('week', func.now( ) ) - timedelta(days=7),
+        Learn.subject=='SQL')).with_entities(func.sum(Learn.duration)).scalar()
+                
+    return (mo_to_sun_sum_subj_sum)
+
+
 ####################### PLOT THE PROGRES CIRCLE MO - SU        ##########################
 @app.route('/progress_plot')
 def progress_plot():
@@ -187,14 +200,18 @@ def progress_plot():
     patches, _ = ax.pie(data, wedgeprops=wedgeprops, startangle=90, colors=['#5DADE2', 'white'])
     patches[1].set_zorder(0)
     patches[1].set_edgecolor('white')
-    plt.title('Percent Complete of total 10 hours a week ', fontsize=24, loc='left')
-    plt.text(0, 0, f"{data[0]}%", ha='center', va='center', fontsize=42)
+    plt.title('Percent Complete : 10 hours a week ', fontsize=20, loc='left')
+    plt.text(0, 0, f"{data[0]}%", ha='center', va='center', fontsize=24)
     plt.savefig('static/images/progress_plot.png')
 
     mo_to_sun = past_mo_to_sun ()
     
     return render_template('progress_plot.html', 
                            url='/static/images/progress_plot.png', mo_to_sun= mo_to_sun)
+
+
+                        
+
 
 
 
