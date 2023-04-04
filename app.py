@@ -212,7 +212,7 @@ def subj_total ():
 def progress_plot():
     fig, ax = plt.subplots(figsize=(6, 6))
 
-    full_circle = 600 ## 10 hours a wee
+    full_circle = 600 ## 10 hours a week learning 
     week_sum_learning = past_mo_to_sun_sum ()
     percent_complete = round (week_sum_learning/full_circle*100, 1)
 
@@ -230,6 +230,75 @@ def progress_plot():
     
     return render_template('progress_plot.html', 
                            url='/static/images/progress_plot.png', mo_to_sun= mo_to_sun)
+
+
+############################## MULTI CIRCLE PLOT PROGRESS ###########################
+from math import pi
+import numpy as np
+from matplotlib.patches import Patch
+from matplotlib.lines import Line2D
+@app.route('/multi_progress_plot')
+def multi_progress_plot ():
+
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax = plt.subplot(projection='polar')
+
+    ######### Get individual progres circle data
+
+    subjects = subj_total()                         ## Get the ('subj_name', hours_learned) touple
+    data =  [i[1] for i in subjects if i[1]!= None] ## Get the hours_total from the tuple
+    subject_titles = [i[0] for i in subjects if i[1]!= None]  ## Get the Subj names from above tuple
+
+    # data = [82, 12, 91]
+    full_circle = 600                               ## Total Hours To learn 600 Hours for all subjects
+    full_circle_each_subj = 600/(len(data))         ## Average Hours for each Subject from 600 hrs
+    progress_full_circle_each_subj = [i/full_circle_each_subj*100 for i in data]   ## % cmplet
+
+
+    startangle = 90
+    colors = ['#4393E5', '#43BAE5', '#7AE6EA']
+
+    # xs = [(i * pi *2)/ 100 for i in data]
+    xs = [(i * pi *2)/ full_circle_each_subj for i in data]
+
+
+    ys = [-0.2, 1, 2.2]
+    left = (startangle * pi *2)/ 360 #this is to control where the bar starts
+    # plot bars and points at the end to make them round
+    for i, x in enumerate(xs):
+        ax.barh(ys[i], x, left=left, height=1, color=colors[i])
+        ax.scatter(x+left, ys[i], s=350, color=colors[i], zorder=2)
+        ax.scatter(left, ys[i], s=350, color=colors[i], zorder=2)
+    
+    plt.ylim(-4, 4)
+
+    
+    legend_elements =  [Line2D([0], [0], marker='o', color='w', label='Group A',
+                            markerfacecolor='#4393E5', markersize=10),
+                        Line2D([0], [0], marker='o', color='w', label='Group B', 
+                            markerfacecolor='#43BAE5', markersize=10),
+                        Line2D([0], [0], marker='o', color='w', label='Group C', 
+                               markerfacecolor='#7AE6EA', markersize=10)]
+    
+    ax.legend(handles=legend_elements, loc='center', frameon=False)
+    # clear ticks, grids, spines
+    plt.xticks([])
+    plt.yticks([])
+    ax.spines.clear()
+
+    plt.savefig('static/images/multi_progress_plot.png')
+    # plt.show()
+
+    mo_to_sun = past_mo_to_sun ()
+
+    return render_template('multi_progress_plot.html', 
+                            url='/static/images/multi_progress_plot.png', mo_to_sun= mo_to_sun)
+
+    # return (legend_elements)
+
+
+
+
 
 
                         
