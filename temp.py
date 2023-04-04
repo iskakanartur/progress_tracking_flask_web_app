@@ -42,3 +42,30 @@ mo_to_sun = db.session.query(Learn).filter(Learn.date_added.between('2023-03-20'
     # # 1 = Sunday, 2 = Monday, ..., 7 = Saturday.
     # mo_to_sun = Learn.query.filter(Learn.date_added.between(start_range, end_range)).all()
 
+
+
+
+
+################### QUERY INDIVIDUAL SUM OF LEARNING SUBJECTS     #########################
+def past_mo_to_sun_subj_sum ():
+
+    from sqlalchemy import and_ ### to combine db queries below
+    
+    mo_to_sun_sum_subj_sum = db.session.query(Learn).filter (and_( 
+        Learn.date_added <= func.date_trunc('week', func.now( ) ), 
+        Learn.date_added >= func.date_trunc('week', func.now( ) ) - timedelta(days=7),
+        Learn.subject=='SQL')).with_entities(func.sum(Learn.duration)).scalar()
+                
+    return (mo_to_sun_sum_subj_sum)
+
+################### QUERY INDIVIDUAL SUM OF LEARNING SUBJECTS  #########################
+def past_mo_to_sun_subj_sum_fun (subject):
+
+    from sqlalchemy import and_ ### to combine db queries below
+    
+    mo_to_sun_sum_subj_sum_fun = db.session.query(Learn).filter (and_( 
+        Learn.date_added <= func.date_trunc('week', func.now( ) ), 
+        Learn.date_added >= func.date_trunc('week', func.now( ) ) - timedelta(days=7),
+        Learn.subject== subject)).with_entities(func.sum(Learn.duration)).scalar()
+                
+    return (mo_to_sun_sum_subj_sum_fun)

@@ -146,6 +146,15 @@ def update():
         return redirect(url_for('index'))
     
 
+################################## Get All SUbject Names     ######################
+def get_subjects ():
+    # subject_names = [subj.subject for subj in Learn.query.all()]
+    subject_names = [subj for subj in db.session.query(Learn.subject).distinct()]
+    subject_names = [i[0] for i in subject_names]
+
+    return (subject_names)
+    
+
 ################################## QUERY LAST WEEK MO - SU   ##########################
 ## See the plain sql version in progress_plain.sql file 
 def past_mo_to_sun ():
@@ -172,17 +181,30 @@ def past_mo_to_sun_sum ():
     return (mo_to_sun_sum)
 
 
-################### QUERY INDIVIDUAL SUM OF LEARNING SUBJECTS     #########################
-def past_mo_to_sun_subj_sum ():
+
+################### QUERY TOTAL HOURS LEARNED DISTINCT SUBJECTS - MO-SU  #########################
+def subj_total ():
 
     from sqlalchemy import and_ ### to combine db queries below
-    
-    mo_to_sun_sum_subj_sum = db.session.query(Learn).filter (and_( 
+
+    distinct_subjects = get_subjects()
+    res = []
+    subj_total_sum_mo_su = []
+    for subject in distinct_subjects:
+        qry_res = mo_to_sun_sum_subj_sum_fun = db.session.query(Learn).filter (and_( 
         Learn.date_added <= func.date_trunc('week', func.now( ) ), 
         Learn.date_added >= func.date_trunc('week', func.now( ) ) - timedelta(days=7),
-        Learn.subject=='SQL')).with_entities(func.sum(Learn.duration)).scalar()
-                
-    return (mo_to_sun_sum_subj_sum)
+        Learn.subject== subject)).with_entities(func.sum(Learn.duration)).scalar()
+
+        res.append(qry_res)
+        subj_total_sum_mo_su.append((subject, qry_res))
+
+    
+    return (subj_total_sum_mo_su)
+
+
+
+
 
 
 ####################### PLOT THE PROGRES CIRCLE MO - SU        ##########################
