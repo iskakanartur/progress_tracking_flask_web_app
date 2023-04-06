@@ -69,3 +69,26 @@ def past_mo_to_sun_subj_sum_fun (subject):
         Learn.subject== subject)).with_entities(func.sum(Learn.duration)).scalar()
                 
     return (mo_to_sun_sum_subj_sum_fun)
+
+
+
+ 
+    ################## LEGENDS FROM MULTI CYCLE PLOT 
+    legend_elements =  [Line2D([0], [0], marker='o', color='w', label='Group A',
+                            markerfacecolor='#4393E5', markersize=10),
+                        Line2D([0], [0], marker='o', color='w', label='Group B', 
+                            markerfacecolor='#43BAE5', markersize=10),
+                        Line2D([0], [0], marker='o', color='w', label='Group C', 
+                               markerfacecolor='#7AE6EA', markersize=10)]
+    ################# Legend Elements 2 ver 
+    
+    subject_titles = [i[0] for i in subjects if i[1]!= None]  ## Get the Subj names from above tuple
+    legend_colors = ['#4393E5', '#43BAE5', '#7AE6EA']
+    legend_elements =[]
+
+    for legend, color in list(zip(subject_titles, legend_colors)):
+        legend_elem =  [Line2D([0], [0], marker='o', color='w', label=f'{legend}',
+                            markerfacecolor=f'{color}', markersize=12)]
+        legend_elements.append(legend_elem)
+
+        # legend_elements.append((legend, color))

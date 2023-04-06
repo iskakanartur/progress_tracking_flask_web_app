@@ -146,13 +146,7 @@ def update():
         return redirect(url_for('index'))
     
 
-################################## Get All SUbject Names     ######################
-def get_subjects ():
-    # subject_names = [subj.subject for subj in Learn.query.all()]
-    subject_names = [subj for subj in db.session.query(Learn.subject).distinct()]
-    subject_names = [i[0] for i in subject_names]
 
-    return (subject_names)
     
 
 ################################## QUERY LAST WEEK MO - SU   ##########################
@@ -181,8 +175,17 @@ def past_mo_to_sun_sum ():
     return (mo_to_sun_sum)
 
 
+################################## Get All SUbject Names     ######################
+def get_subjects ():
+    # subject_names = [subj.subject for subj in Learn.query.all()]
+    subject_names = [subj for subj in db.session.query(Learn.subject).distinct()]
+    subject_names = [i[0] for i in subject_names]
 
-################### QUERY TOTAL HOURS LEARNED DISTINCT SUBJECTS - MO-SU  #########################
+    return (subject_names)
+
+
+
+###################  DISTINCT SUBJECTS & TOTAL HOURS LEARNED EACH  Past - MO-SU  ###############
 def subj_total ():
 
     from sqlalchemy import and_ ### to combine db queries below
@@ -237,32 +240,38 @@ from math import pi
 import numpy as np
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
+
 @app.route('/multi_progress_plot')
 def multi_progress_plot ():
 
-    fig, ax = plt.subplots(figsize=(6, 6))
+    fig, ax = plt.subplots(figsize=(9, 9))
     ax = plt.subplot(projection='polar')
 
     ######### Get individual progres circle data
 
     subjects = subj_total()                         ## Get the ('subj_name', hours_learned) touple
     data =  [i[1] for i in subjects if i[1]!= None] ## Get the hours_total from the tuple
-    subject_titles = [i[0] for i in subjects if i[1]!= None]  ## Get the Subj names from above tuple
 
-    # data = [82, 12, 91]
     full_circle = 600                               ## Total Hours To learn 600 Hours for all subjects
     full_circle_each_subj = 600/(len(data))         ## Average Hours for each Subject from 600 hrs
     progress_full_circle_each_subj = [i/full_circle_each_subj*100 for i in data]   ## % cmplet
 
 
     startangle = 90
-    colors = ['#4393E5', '#43BAE5', '#7AE6EA']
 
-    # xs = [(i * pi *2)/ 100 for i in data]
+    ######### COLORS : Depending on Varying number of Distinct Subjects
+    ######### Pick up a random color based on data length
+    import random
+    color_palette = ['#3FFF33', '#4393E5', '#F9FF33', '#7AE6EA', '#4933FF', '#FF336E', '#33FF8A',
+                     '#FF33C1', '#FF4633', '#F9FF33', '#3FFF33', '#43BAE5'] 
+    # colors = random.choices(color_palette, k = len(data)) Radnom can repeat
+    colors = color_palette[:len(data)]
+
     xs = [(i * pi *2)/ full_circle_each_subj for i in data]
 
+   #  ys = [-0.2, 1, 2.2, 3.5, 4.8, 5.7] ## This controls gap btw circles. Match data len 
+    ys = [-1.5, 1.2, 2.5, 3.9, 5.2, 12] ## This controls gap btw circles. Match data len 
 
-    ys = [-0.2, 1, 2.2]
     left = (startangle * pi *2)/ 360 #this is to control where the bar starts
     # plot bars and points at the end to make them round
     for i, x in enumerate(xs):
@@ -272,38 +281,36 @@ def multi_progress_plot ():
     
     plt.ylim(-4, 4)
 
-    
-    legend_elements =  [Line2D([0], [0], marker='o', color='w', label='Group A',
-                            markerfacecolor='#4393E5', markersize=10),
-                        Line2D([0], [0], marker='o', color='w', label='Group B', 
-                            markerfacecolor='#43BAE5', markersize=10),
-                        Line2D([0], [0], marker='o', color='w', label='Group C', 
-                               markerfacecolor='#7AE6EA', markersize=10)]
+    ############# LEGEND ELEMENTS
+    subject_titles = [i[0] for i in subjects if i[1]!= None]  ## Get the Subj names from above tuple
+    legend_elements =[]
+
+    for legend, color in list(zip(subject_titles, colors)):
+        legend_elem =  [Line2D([0], [0], marker='o', color='w', label=f'{legend}',
+                            markerfacecolor=f'{color}', markersize=12)]
+        legend_elements.append(legend_elem)
+    legend_elements = [i[0] for i in legend_elements] ## Get rid of nested lists
+        
     
     ax.legend(handles=legend_elements, loc='center', frameon=False)
-    # clear ticks, grids, spines
-    plt.xticks([])
-    plt.yticks([])
+    ### clear ticks, grids, spines
+    # plt.xticks([])
+    # plt.yticks([])
     ax.spines.clear()
 
     plt.savefig('static/images/multi_progress_plot.png')
-    # plt.show()
+    plt.show()
 
     mo_to_sun = past_mo_to_sun ()
 
     return render_template('multi_progress_plot.html', 
-                            url='/static/images/multi_progress_plot.png', mo_to_sun= mo_to_sun)
+                           url='/static/images/multi_progress_plot.png', mo_to_sun= mo_to_sun)
 
-    # return (legend_elements)
+    # return (colors, xs)
 
-
-
-
-
-
-                        
-
-
+    #for i, x in enumerate(xs):
+        #print (i, x)
+    
 
 
 
