@@ -1,3 +1,15 @@
+----------- INITIAL TABLE INSERT FIRST ROW -----------
+INSERT INTO 
+    learn (subject, duration, date_added, comment)
+VALUES
+    ('FLASK', 41 , '2023-04-3', 'Test Data' ),
+    ('ML', 23 , '2023-04-4', 'test Data Ignore' ),
+    ('SQL', 56 , '2023-04-5', 'No Cmment' ),
+    ('PHP', 46 , '2023-04-6', 'No Cmment' ),
+    ('CSS', 23 , '2023-04-7', 'No Cmment' ),
+    ('HTML', 46 , '2023-04-8', 'No Cmment' ),
+    ('POSTGRES', 46 , '2023-04-9', 'No Cmment' );
+
 
 
 ------------ WORKING SELECTION PAST WEEK From MONDAY to SUNDAY -----------------

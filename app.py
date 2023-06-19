@@ -41,6 +41,8 @@ app = Flask(__name__)
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:{settings.pgpw}@localhost/progress'
+# app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:@localhost/progress'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = settings.sky
 
@@ -241,6 +243,8 @@ import numpy as np
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
+import numpy as np ## To create evenly spaced numbers 
+
 @app.route('/multi_progress_plot')
 def multi_progress_plot ():
 
@@ -269,17 +273,19 @@ def multi_progress_plot ():
 
     xs = [(i * pi *2)/ full_circle_each_subj for i in data]
 
-   #  ys = [-0.2, 1, 2.2, 3.5, 4.8, 5.7] ## This controls gap btw circles. Match data len 
-    ys = [-1.5, 1.2, 2.5, 3.9, 5.2, 12] ## This controls gap btw circles. Match data len 
+    ###### SPAcing the circles
+    ys = np.linspace(3, 9, num=len(data))  ## This controls gap btw circles. Match data len 
 
     left = (startangle * pi *2)/ 360 #this is to control where the bar starts
+
     # plot bars and points at the end to make them round
     for i, x in enumerate(xs):
-        ax.barh(ys[i], x, left=left, height=1, color=colors[i])
-        ax.scatter(x+left, ys[i], s=350, color=colors[i], zorder=2)
+        ax.barh(ys[i], x, left=left, height=0.8, color=colors[i])
+        ax.scatter(x+left, ys[i], s=350, color=colors[i], zorder=2) ## The cup at the end of crcle
         ax.scatter(left, ys[i], s=350, color=colors[i], zorder=2)
     
-    plt.ylim(-4, 4)
+    # plt.ylim(-4, 4)   ### This Mother fucker was limiting y axis - hence number of rings
+    
 
     ############# LEGEND ELEMENTS
     subject_titles = [i[0] for i in subjects if i[1]!= None]  ## Get the Subj names from above tuple
@@ -294,8 +300,12 @@ def multi_progress_plot ():
     
     ax.legend(handles=legend_elements, loc='center', frameon=False)
     ### clear ticks, grids, spines
-    # plt.xticks([])
-    # plt.yticks([])
+    ax.set_xticks([]) # values
+    ax.set_xticklabels([]) # labels
+
+    ax.set_yticks([]) # values
+    ax.set_yticklabels([]) # labels
+    
     ax.spines.clear()
 
     plt.savefig('static/images/multi_progress_plot.png')
