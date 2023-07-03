@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-
 {% block title %}
-  Visualisation Page
+  Viz
 {% endblock %}
 
 
@@ -12,40 +11,38 @@
 <img src={{url}} alt="Chart" height="35%" width="35%">
 
 
-<table class="table table-success table-striped table-hover table-dark" border="0.2">
-  <thead>
-      <tr>
-          <th>ID</th>
-          <th>Subject</th>
-          <th>Duration</th>
-          <th>Date</th>
-          <th>Comments</th>
-          
-      </tr>
-  </thead>
-  <tbody>
+<div class="panel panel-default">
+  <div class="panel-heading">Panel Heading</div>
+</div>
 
+ 
+      <table class="table table-success table-striped table-hover table-dark" border="0.2">
+        
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Subject</th>
+                <th>Duration</th>
+                <th>Date</th>
+                <th>Comments</th>
+                <th colspan="2">Actions</th>
+            </tr>
+        </thead>
 
-      {% for learn_query in mo_to_sun %}
-          <tr>
-              <td>{{learn_query.id}}</td>
-              <td>{{learn_query.subject}}</td>
-              <td>{{learn_query.duration}}</td>
-              <td>{{learn_query.date_added.strftime('%Y-%m-%d')}}</td>
-              <td>{{learn_query.comment}}</td>
+            <tbody>
+              {% for day in sun_mon_plot %}
+                <tr>
+                  <td>{{day.id}}</td>
+                  <td>{{day.subject}}</td>
+                  <td>{{day.duration}}</td>
+                  <td>{{day.date_added.strftime('%Y-%m-%d')}}</td>
+                  <td>{{day.comment}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
 
-              <td>
-
-        {% endfor %}
-
-    
-
-              </tbody>
-          </table>
-
-
-
-
-     
+            
+      </table>
 {% endblock %}
+
 

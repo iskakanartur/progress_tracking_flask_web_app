@@ -10,31 +10,29 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">Panel Heading</div>
-    <div class="panel-body">Sum for Januray : {{janr|sum(attribute='price')}} -  Aver for January : {{(janr|sum(attribute='price')/dyz[1])|round }}  </div>
 </div>
 
  
-      <table class="table table-hover table-dark">  
+      <table class="table table-success table-striped table-hover table-dark" border="0.2">
         <thead>
             <tr>
-                <!-- Your Columns HERE -->
-                <th scope="col">ID</th>
-                <th scope="col">Ապրանքատեսակ</th>
-                <th scope="col">Նշումներ</th>
-                <th scope="col">Գին</th>
-                <th scope="col">Գնված է</th>
+                <th>ID</th>
+                <th>Subject</th>
+                <th>Duration</th>
+                <th>Date</th>
+                <th>Comments</th>
+                <th colspan="2">Actions</th>
             </tr>
-        </thead>
-        <tbody>
-            <!-- Your rows inside the table HERE: -->
+          </thead>
+         <tbody>
 
             {% for j in janr %}
             <tr>
               <td>{{j.id}}</td>
-              <td>{{j.product }}</td>
-              <td>{{j.comment}}</td>
-              <td>{{j.price}}</td>
+              <td>{{j.subject}}</td>
+              <td>{{j.duration}}</td>
               <td>{{j.date_added.strftime('%Y-%m-%d')}}</td>
+              <td>{{j.comment}}</td>
           </tr>
           {% endfor %}
 
