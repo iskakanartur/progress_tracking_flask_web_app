@@ -60,12 +60,17 @@ class Learn(db.Model):
     date_added = db.Column(db.DateTime(timezone=True), server_default=func.now())
     comment = db.Column(db.String(150), nullable=True)
 
+    ## placeholder for week_goal
+    # week_goal = db.Column(db.Integer)
+
 
     def __init__(self, subject, duration, date_added, comment):
         self.subject = subject
         self.duration = duration 
         self.date_added = date_added
         self.comment = comment
+
+        # self.week_goal = week_goal
 
 
 
@@ -109,7 +114,7 @@ def subj_total ():
     subj_total_sum_mo_su = []
     for subject in distinct_subjects:
         qry_res = db.session.query(Learn).filter (and_( 
-        Learn.date_added <= func.date_trunc('week', func.now( ) ), 
+        Learn.date_added < func.date_trunc('week', func.now( ) ), 
         Learn.date_added >= func.date_trunc('week', func.now( ) ) - timedelta(days=7),
         Learn.subject== subject)).with_entities(func.sum(Learn.duration)).scalar()
 
@@ -195,6 +200,10 @@ def update():
         return redirect(url_for('index'))
     
 
+
+
+   
+
 #####  7 Day Histry 
 @app.route('/history')
 def history_page():
@@ -211,8 +220,9 @@ def past_mo_to_sun ():
 
     from sqlalchemy import and_ ### to combine db queries below
     
+    # <= in the first clause (func.date_tunc) makes it monday to monday
     mo_to_sun = db.session.query(Learn).filter (and_
-                (Learn.date_added <= func.date_trunc('week', func.now( ) ), 
+                (Learn.date_added < func.date_trunc('week', func.now( ) ), 
                  Learn.date_added >= func.date_trunc('week', func.now( ) ) - timedelta(days=7))).order_by(Learn.date_added )
                 
     return render_template('mo_su.html', mo_to_sun=mo_to_sun )
@@ -345,7 +355,7 @@ def multi_progress_plot ():
     ax.spines.clear()
 
     plt.savefig('static/images/multi_progress_plot.png')
-    plt.show()
+    # plt.show()
 
    #  mo_to_sun = past_mo_to_sun ()
 
