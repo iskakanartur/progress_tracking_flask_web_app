@@ -83,6 +83,19 @@ class various(db.Model):
 
 ################################# ------- HELPER FUNCTIONS ------ #########################
 
+
+## get last updated weekly learning goal 
+def get_last_weekly_goal():
+    last_record = various.query.order_by(various.datetime.desc()).first()
+    # Accessing the columns of the last record
+    if last_record:
+        last_record_goal = last_record.week_goal
+        # Access other columns as needed
+    else:
+        last_record_goal = None
+
+    return (last_record_goal)
+
 ## query sunday to monday 
 def sun_mon():
     sun_mon = db.session.query(Learn).filter (and_
@@ -269,14 +282,11 @@ def february():
 
 
     
-
-
     
 
-
-
-
 ######################################### -------------- PLOTS and GRAPHS ------------- ##########################
+
+
 
 #### SINGLE PLOT 
 @app.route('/progress_plot')
@@ -316,17 +326,16 @@ import numpy as np ## To create evenly spaced numbers
 @app.route('/multi_progress_plot')
 def multi_progress_plot ():
 
-    fig, ax = plt.subplots(figsize=(9, 9))
+    fig, ax = plt.subplots(figsize=(7, 7))
     ax = plt.subplot(projection='polar')
 
     ######### Get individual progres circle data
-
     subjects = subj_total()                         ## Get the ('subj_name', hours_learned) touple
     data =  [i[1] for i in subjects if i[1]!= None] ## Get the hours_total from the tuple
 
-    full_circle = 600                               ## Total Hours To learn 600 Hours for all subjects
-    full_circle_each_subj = 600/(len(data))         ## Average Hours for each Subject from 600 hrs
-    progress_full_circle_each_subj = [i/full_circle_each_subj*100 for i in data]   ## % cmplet
+    weekly_learning_total = get_last_weekly_goal()                    ## Weekly Total Learning Goal  for all subjects
+    full_circle_each_subj = weekly_learning_total/(len(data))         ## Average Hours for each Subject from 600 hrs
+    progress_full_circle_each_subj = [i/full_circle_each_subj*100 for i in data]   ## % cmplete
 
 
     startangle = 90
@@ -366,7 +375,7 @@ def multi_progress_plot ():
     legend_elements = [i[0] for i in legend_elements] ## Get rid of nested lists
         
     
-    ax.legend(handles=legend_elements, loc='center', frameon=False)
+    ax.legend(handles=legend_elements, loc='upper right', frameon=False)
     ### clear ticks, grids, spines
     ax.set_xticks([]) # values
     ax.set_xticklabels([]) # labels
@@ -394,11 +403,6 @@ def multi_progress_plot ():
     #for i, x in enumerate(xs):
         #print (i, x)
     
-
-
-
-
-
 
 
 
