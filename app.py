@@ -49,8 +49,7 @@ app.secret_key = settings.sky
 
 db = SQLAlchemy(app)
 
-#def get_date():
-    #return CURRENT_TIMESTAMP;
+############ DO NOT FORGET THE WK_GOAL TABLE - put a class for it below
 
 class Learn(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -60,9 +59,6 @@ class Learn(db.Model):
     date_added = db.Column(db.DateTime(timezone=True), server_default=func.now())
     comment = db.Column(db.String(150), nullable=True)
 
-    ## placeholder for week_goal
-    # week_goal = db.Column(db.Integer)
-
 
     def __init__(self, subject, duration, date_added, comment):
         self.subject = subject
@@ -70,7 +66,17 @@ class Learn(db.Model):
         self.date_added = date_added
         self.comment = comment
 
-        # self.week_goal = week_goal
+
+#### A table to store various data e.g. Weekly Learning Goal 
+class various(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    datetime = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    week_goal  = db.Column(db.Integer)
+
+
+    def __init__(self, datetime, week_goal):
+        self.datetime = datetime
+        self.week_goal = week_goal
 
 
 
@@ -171,14 +177,30 @@ def index():
 @app.route('/add/', methods = ['POST'])
 def insert_subject():
     if request.method =='POST':
-        prod = Learn(
-            subject = request.form.get('subject'),
-            duration = request.form.get('duration'),
-            comment = request.form.get('comment'),
+        session = Learn(
+            subject =    request.form.get('subject'),
+            duration =   request.form.get('duration'),
+            comment =    request.form.get('comment'),
             date_added = request.form.get('date_added')
+            
 
         )
-        db.session.add(prod)
+        db.session.add(session)
+        db.session.commit()
+        flash("Ձեր գոնումը հայտնվեց շտեմարանում, Շնորհակալութոյւն")
+        return redirect(url_for('index'))
+    
+
+###### Set Weekly Learny Goal from Navbar
+@app.route('/week_goal/', methods = ['POST'])
+def wkly_goal():
+    if request.method =='POST':
+    
+        goal = various(
+            datetime = request.form.get('datetime'),
+            week_goal = request.form.get('week_goal')
+        )
+        db.session.add(goal)
         db.session.commit()
         flash("Ձեր գոնումը հայտնվեց շտեմարանում, Շնորհակալութոյւն")
         return redirect(url_for('index'))
@@ -194,7 +216,7 @@ def update():
         my_data.duration = request.form['duration']
         my_data.date_added = request.form['date_added']
         my_data.comment = request.form['comment']
-
+        
         db.session.commit()
         flash("Գնումը Գրանցված է")
         return redirect(url_for('index'))
