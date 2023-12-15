@@ -37,7 +37,11 @@ import psycopg2
 
 
 
+
+
 app = Flask(__name__)
+
+
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:{settings.pgpw}@localhost/progress'
@@ -77,6 +81,9 @@ class various(db.Model):
     def __init__(self, datetime, week_goal):
         self.datetime = datetime
         self.week_goal = week_goal
+
+
+
 
 
 
@@ -167,6 +174,9 @@ def total_number_of_days ():
 
     return (total_days_count_final)
     # return (fst)
+
+
+
 
 
 
