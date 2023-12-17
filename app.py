@@ -1,7 +1,7 @@
 
 ## WHen First createing the Table Learnries enter flask shell 
 ## from app import db
-## db.create_all() zz
+## db.create_all() zzl
 
 
 
